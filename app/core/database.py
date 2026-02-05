@@ -1,11 +1,11 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-DATABASE_URL = "sqlite:///./support_ticket.db"
+DATABASE_URL = "mysql+pymysql://root:root@localhost:3306/support_ticket"
 
 engine = create_engine(
     DATABASE_URL,
-    connect_args={"check_same_thread": False}  # SQLite only
+    echo=True
 )
 
 SessionLocal = sessionmaker(

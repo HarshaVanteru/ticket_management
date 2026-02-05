@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordRequestForm
 
 from app.dependencies.auth import get_db
+from app.repositories.user_repository import create_user
 from app.services.auth_service import authenticate_user, AuthenticationError
 from app.core.security import create_access_token
 from app.models.user import User
@@ -28,14 +29,11 @@ def signup(user: UserCreate, db: Session = Depends(get_db)):
 
     hashed_password = hash_password(user.password)
 
-    new_user = User(
+    new_user = create_user(
+        db=db,
         email=user.email,
         password_hash=hashed_password
     )
-
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
 
     return {
         "id": new_user.id,
